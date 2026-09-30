@@ -21,24 +21,88 @@ format:
 
 ### Tasks
 
-- [ ] Print "Hello World" to the console. 
-- [ ] Write a function that takes a name, and prints "Hello <name>" to the console.
-- [ ] Assign the value 42 to a variable called `answer`.
-- [ ] Create a numeric vector containing the numbers 1 through 5.
-- [ ] Create a numeric vector containing the numbers 1 through 1000.
-- [ ] Create a matrix with 10 rows and 10 columns filled with numbers 1 to 100.
-- [ ] Create a data frame with two columns: one called `name` containing three names, and one called `age` containing three ages.
-- [ ] Write a function that returns the square of its input.
-- [ ] Use a for loop to print the numbers 1 to 5.
-- [ ] Use a for loop to compute the mean of a numeric vector.
+- [x] Print "Hello World" to the console.
+```{r}
+print("Hello World")
+```
+- [x] Write a function that takes a name, and prints "Hello <name>" to the console.
+```{r}
+greeting <- function(name) {
+  print(paste0("Hello ", name))
+}
+greeting("HELLO")
+```
+- [x] Assign the value 42 to a variable called `answer`.
+```{r}
+answer <- 42
+```
+- [x] Create a numeric vector containing the numbers 1 through 5.
+```{r}
+vec1 <- c(1:5)
+```
+- [x] Create a numeric vector containing the numbers 1 through 1000.
+```{r}
+vec1 <- c(1:1000)
+```
+- [x] Create a matrix with 10 rows and 10 columns filled with numbers 1 to 100.
+```{r}
+matrix(c(1:100), 10, 10, byrow = TRUE)
+```
+- [x] Create a data frame with two columns: one called `name` containing three names, and one called `age` containing three ages.
+```{r}
+df <- data.frame(
+  name = c("Kevin", "Bob", "Stuart"),
+  age = c(1980, 1978, 1979)
+)
+df
+```
+- [x] Write a function that returns the square of its input.
+```{r}
+square <- function(x){
+  x <- x**2
+}
+print(square(3))
+```
+- [x] Use a for loop to print the numbers 1 to 5.
+```{r}
+for (i in 1:5){
+  print(i)
+}
+```
+- [x] Use a for loop to compute the mean of a numeric vector.
+```{r}
+numvec = c(17, 24, 109, 10, 47, 2003, 41, -12)
+total = 0
+loops = 0
+for (i in numvec){
+  total = total + i
+  loops = loops + 1
+}
+mean = total/loops
+print(mean)
+```
 
 
 ## Part 1b: Lists
 
 Recall that a *list* can hold a mixture of types, and that lists turn up all over `R` — in particular, they are how a function returns several results at once, and how we store a collection of records.
 
-- [ ] A function can only return a single object, so when we want to return several results we bundle them into a list. Write a function `summarise_vector(x)` that returns a **named list** with the `mean`, `min`, `max`, and `n` (length) of a numeric vector `x`. Call it on `c(210, 217, 230, 205)` and use `$` to print just the mean from the result.
+- [x] A function can only return a single object, so when we want to return several results we bundle them into a list. Write a function `summarise_vector(x)` that returns a **named list** with the `mean`, `min`, `max`, and `n` (length) of a numeric vector `x`. Call it on `c(210, 217, 230, 205)` and use `$` to print just the mean from the result.
+```{r}
+summarise_vector <- function(x){
+  summary = list(mean = mean(x, na.rm=TRUE), min = min(x, na.rm=TRUE), max = max(x, na.rm=TRUE), n = length(x))
+}
+y = c(210, 217, 230, 205)
+z = summarise_vector(y)
+print(z$mean)
+```
 - [ ] Call `str()` on the value your function returns to confirm its structure, then modify `summarise_vector` so that missing values are ignored (test it on a vector containing `NA`).
+```{r}
+str(z)
+y = c(1,2,3,NA)
+z = summarise_vector(y)
+print(z)
+```
 - [ ] Below is a list of penguins, each itself a list. Using a `for` loop (or `sapply`), extract the `species` of every penguin into a character vector, and compute the mean flipper length across all of them.
 
 ```{r}
@@ -93,12 +157,21 @@ vector <- 1:100
 
 Use elementwise indexing to display all elements in the vector that are:
 
-- [ ] $\leq$ 10
-- [ ] $>$ 90
-- [ ] $\leq 10$ or $> 90$ 
-- [ ] $> 10$ and $\leq 90$
-- [ ] Odd
+- [x] $\leq$ 10
+- [x] $>$ 90
+- [x] $\leq 10$ or $> 90$ 
+- [x] $> 10$ and $\leq 90$
+- [x] Odd
 - [ ] (Advanced): Prime
+
+```{r}
+vector[vector <= 10]
+vector[vector > 90]
+vector[vector <= 10 | vector > 90]
+vector[vector > 10 & vector <= 90]
+vector[vector/2 != round(vector/2)]
+
+```
 
 Hint: You will need to look up how to *combine* logical indexing statements and also some more *advanced* logical indexing statements.
 For the last task look at using `sapply`.
@@ -123,14 +196,41 @@ students <- data.frame(
 )
 ```
 
-- [ ] Using `if_else`, add a new column `result` to `students` that is `"pass"` when the score is at least 40 and `"fail"` otherwise.
-- [ ] Using `case_when`, add a new column `grade` to `students` giving the classification: `"first"` (at least 70), `"2:1"` (at least 60), `"2:2"` (at least 50), `"third"` (at least 40), and `"fail"` otherwise. Remember that conditions are checked in order, so the most specific should come first.
-- [ ] Standard `if`/`else` statements make a single decision about a single value. Using `if`, `else if` and `else`, complete the stub function `is_leap_year` below so that it returns `TRUE` if `year` is a *leap year* and `FALSE` otherwise. The rule is:
+- [x] Using `if_else`, add a new column `result` to `students` that is `"pass"` when the score is at least 40 and `"fail"` otherwise.
+```{r}
+result = c()
+for (i in students$score){
+  if (i > 39){
+    res = "Pass"
+  }
+  else{
+    res = "Fail"
+  }
+  result = c(result, res)
+}
+students$result = result
+
+```
+- [x] Using `case_when`, add a new column `grade` to `students` giving the classification: `"first"` (at least 70), `"2:1"` (at least 60), `"2:2"` (at least 50), `"third"` (at least 40), and `"fail"` otherwise. Remember that conditions are checked in order, so the most specific should come first.
+```{r}
+grade = c()
+for (i in students$score){
+  g = case_when(
+    i > 70 ~ "first",
+    i > 60 ~ "2:1",
+    i > 50 ~ "2:2",
+    i > 40 ~ "third",
+    TRUE ~ "fail"
+  )
+  grade = c(grade, g)
+}
+students$grade = grade
+```
+- [x] Standard `if`/`else` statements make a single decision about a single value. Using `if`, `else if` and `else`, complete the stub function `is_leap_year` below so that it returns `TRUE` if `year` is a *leap year* and `FALSE` otherwise. The rule is:
     - if `year` is divisible by 400, it is a leap year;
     - otherwise, if `year` is divisible by 100, it is *not* a leap year;
     - otherwise, if `year` is divisible by 4, it is a leap year;
     - otherwise, it is *not* a leap year.
-
 ::: {.callout-tip}
 The modulo operator `%%` gives the remainder of a division, so `year %% 400 == 0` tests whether `year` is divisible by 400.
 :::
@@ -144,7 +244,18 @@ The modulo operator `%%` gives the remainder of a division, so `year %% 400 == 0
 ```{r}
 #| error: TRUE
 is_leap_year <- function(year) {
-    FALSE # Replace with correct code.
+    if(year %% 400 == 0){
+      TRUE
+    }
+    else if(year %% 100 == 0){
+      FALSE
+    }
+    else if(year %% 4 == 0){
+      TRUE
+    }
+    else{
+      FALSE
+    }
 }
 
 # Self-check: should run without error once is_leap_year is correct
@@ -188,8 +299,18 @@ make_square(5)
 .....
 ```
 
+```{r}
+
+```
+
 - [ ] (Advanced): Look up *while loops* in `R`. Write a function that uses a while loop to simulate a particle undergoing a *random walk* in 1D. Starting from 0, in each iteration, the particle either takes a step $x \mapsto x + 1$ or $x \mapsto x - 1$, uniformly at random. Terminate the walk when the particle reaches either -10 or +10, and print where it ended up and how many steps it took.
+```{r}
+
+```
 - [ ] (Advanced): Run your function from above multiple times. Display how often the particle ended at -10 and how often it ended at +10. Make sure that your results do not change if the worksheet is run multiple times!
+```{r}
+
+```
 
 ::: {.callout-tip}
 Your random walk uses randomly generated numbers, so it will produce different output every time the document is rendered. To make results *reproducible* — the same every time — look up `set.seed()` and call it once at the start of the chunk. We will return to why this matters for reproducibility later in the course.
